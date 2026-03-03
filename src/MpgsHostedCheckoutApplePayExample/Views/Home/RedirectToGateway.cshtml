@@ -1,0 +1,38 @@
+@model HostedCheckoutRedirectViewModel
+@using System.Text.Json
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Redirecting to MPGS Hosted Checkout</title>
+    <script>
+        function errorCallback(error) {
+            console.error("MPGS Checkout error", error);
+            document.getElementById("status").textContent = "Could not open Hosted Checkout. See browser console.";
+        }
+
+        function cancelCallback() {
+            window.location.href = "/checkout/return?status=cancelled";
+        }
+    </script>
+    <script src="@Model.CheckoutJsUrl" data-error="errorCallback" data-cancel="cancelCallback"></script>
+</head>
+<body style="font-family:Arial,sans-serif;max-width:900px;margin:32px auto;padding:0 16px;">
+    <h1>Redirecting to Hosted Checkout...</h1>
+    <p id="status">If redirect does not start automatically, click the button below.</p>
+    <button type="button" onclick="Checkout.showPaymentPage();" style="padding:10px 14px;">
+        Open Hosted Checkout
+    </button>
+
+    <script>
+        Checkout.configure({
+            session: {
+                id: @Html.Raw(JsonSerializer.Serialize(Model.SessionId))
+            }
+        });
+
+        Checkout.showPaymentPage();
+    </script>
+</body>
+</html>

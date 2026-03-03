@@ -1,0 +1,53 @@
+@model CheckoutIndexViewModel
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MPGS Hosted Checkout Apple Pay (.NET 8 MVC)</title>
+</head>
+<body style="font-family:Arial,sans-serif;max-width:900px;margin:32px auto;line-height:1.45;padding:0 16px;">
+    <h1>MPGS Hosted Checkout + Apple Pay (.NET 8 MVC example)</h1>
+    <p>
+        This demo calls <code>INITIATE_CHECKOUT</code> on your server, then redirects
+        the browser to the MPGS hosted payment page.
+    </p>
+    <ul>
+        <li>Merchant display name: <strong>@Model.MerchantDisplayName</strong></li>
+        <li>Gateway URL: <strong>@Model.GatewayBaseUrl</strong></li>
+    </ul>
+    <p>
+        <strong>Apple Pay note:</strong> In Hosted Checkout, Apple Pay availability is controlled
+        by your MPGS profile and device/browser capability. It appears on full-page redirect
+        when enabled by your acquirer/bank.
+    </p>
+
+    @if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+    {
+        <div style="padding:12px;border-radius:8px;background:#fee2e2;color:#7f1d1d;margin-bottom:16px;">
+            <strong>Error:</strong> @Model.ErrorMessage
+        </div>
+    }
+
+    <form method="post" action="/checkout" style="display:grid;gap:12px;max-width:480px;">
+        <label>
+            Amount
+            <input name="Amount" value="@Model.Form.Amount" required />
+        </label>
+        <label>
+            Currency (ISO alpha-3)
+            <input name="Currency" value="@Model.Form.Currency" required maxlength="3" />
+        </label>
+        <label>
+            Description
+            <input name="Description" value="@Model.Form.Description" />
+        </label>
+        <button type="submit" style="padding:10px 14px;">Proceed to Hosted Checkout</button>
+    </form>
+
+    <p style="margin-top:20px;color:#374151;">
+        This sample stores MPGS <code>successIndicator</code> in a short-lived cookie and compares it
+        against the <code>resultIndicator</code> query parameter on return.
+    </p>
+</body>
+</html>
