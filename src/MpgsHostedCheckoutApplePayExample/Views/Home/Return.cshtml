@@ -1,0 +1,35 @@
+@model CheckoutReturnViewModel
+@{
+    var verificationMessage = Model.IndicatorVerified
+        ? "resultIndicator matches successIndicator (session appears consistent)."
+        : "resultIndicator could not be verified against successIndicator.";
+    var verificationColor = Model.IndicatorVerified ? "#065f46" : "#7f1d1d";
+    var verificationBackground = Model.IndicatorVerified ? "#d1fae5" : "#fee2e2";
+}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MPGS Return</title>
+</head>
+<body style="font-family:Arial,sans-serif;max-width:900px;margin:32px auto;line-height:1.45;padding:0 16px;">
+    <h1>Hosted Checkout Return</h1>
+    <p>Return status: <strong>@Model.Status</strong></p>
+
+    <div style="padding:12px;border-radius:8px;background:@verificationBackground;color:@verificationColor;margin-bottom:16px;">
+        @verificationMessage
+    </div>
+
+    <ul>
+        <li><code>resultIndicator</code>: <code>@Model.ResultIndicator</code></li>
+        <li>Saved <code>successIndicator</code>: <code>@Model.ExpectedIndicator</code></li>
+    </ul>
+
+    <p>
+        Next step for production: query the order/transaction via backend API and fulfill
+        only after your server confirms the final payment state.
+    </p>
+    <p><a href="/">Start a new checkout</a></p>
+</body>
+</html>

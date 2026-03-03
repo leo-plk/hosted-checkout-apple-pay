@@ -1,6 +1,6 @@
-# MPGS Hosted Checkout + Apple Pay (.NET Core Example)
+# MPGS Hosted Checkout + Apple Pay (.NET 8 MVC Example)
 
-This repository contains a minimal **ASP.NET Core** sample for:
+This repository contains a minimal **ASP.NET Core MVC (.NET 8)** sample for:
 
 1. Creating an MPGS Hosted Checkout session via `INITIATE_CHECKOUT`
 2. Redirecting the payer with `Checkout.showPaymentPage()`
@@ -12,9 +12,20 @@ This repository contains a minimal **ASP.NET Core** sample for:
 
 `src/MpgsHostedCheckoutApplePayExample`
 
+## MVC structure
+
+- `Controllers/HomeController.cs`
+  - `GET /`
+  - `POST /checkout`
+  - `GET /checkout/return`
+- `Views/Home/Index.cshtml`
+- `Views/Home/RedirectToGateway.cshtml`
+- `Views/Home/Return.cshtml`
+- `MpgsGatewayClient.cs` for MPGS API calls
+
 ## MPGS flow implemented
 
-- `POST /checkout` (server-side):
+- `POST /checkout` (server-side, HomeController):
   - Calls:
     - `POST {gatewayBaseUrl}/api/rest/version/{apiVersion}/merchant/{merchantId}/session`
   - Sends payload:
@@ -24,7 +35,7 @@ This repository contains a minimal **ASP.NET Core** sample for:
     - `interaction.merchant.name`
     - `order.id`, `order.amount`, `order.currency`, `order.description`
   - Stores `successIndicator` in a short-lived cookie for demo verification.
-- Browser page:
+- Razor redirect view:
   - Loads `https://<gateway>/static/checkout/checkout.min.js`
   - Calls `Checkout.configure({ session: { id } })`
   - Calls `Checkout.showPaymentPage()`
@@ -53,7 +64,7 @@ cd src/MpgsHostedCheckoutApplePayExample
 dotnet run
 ```
 
-Then open the URL shown in console (typically `http://localhost:5000`).
+Then open the URL shown in console.
 
 ## Important production notes
 
